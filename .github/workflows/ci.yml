@@ -1,0 +1,69 @@
+name: CI
+on:
+  pull_request:
+    branches: [develop, master]
+  push:
+    branches: [develop, master]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      # Cache our node modules
+      - name: Cache node_modules
+        uses: actions/cache@v1
+        with: 
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+
+      - name: use node js
+        uses: actions/setup-node@v1
+        with:
+          node-version: "16.x"
+      
+      - run: npm ci # npm ci is better than npm install
+      - run: npm run format:check
+      - run: npm test -- --coverage
+        env:
+          CI: true
+      # below step for uploading test coverage as artifact
+      - name: Upload test coverage
+        uses: actions/upload-artifact@v1
+        with:
+          name: code-coverage
+          path: coverage
+
+
+        # below steps will run only when request is merged in develop branch
+      - name: Build Project
+        if: github.event_name == 'push'
+        run: npm run build 
+        # Below step for uploading build folder as artifact
+      - name: Upload Build folder
+        if: github.event_name == 'push'
+        uses: actions/upload-artifact@v1
+        with:
+          name: build
+          path: build
+
+      # - uses: actions/download-artifact
+      # - run: npm install -g surge
+      - name: Create a release
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        run: npx semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # Deploy our build folder to staging server
+      - name: Deploy to Staging
+        if: github.event_name == 'push'
+        run: npx surge --project ./build --domain vacuous-nest.surge.sh
+        env:
+          SURGE_LOGIN: ${{ secrets.SURGE_LOGIN }}
+          SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}
+        
+      
+
+
