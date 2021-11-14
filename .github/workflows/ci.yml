@@ -1,9 +1,9 @@
 name: CI
 on:
   pull_request:
-    branches: [develop]
+    branches: [develop, master]
   push:
-    branches: [develop]
+    branches: [develop, master]
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -51,7 +51,11 @@ jobs:
 
       # - uses: actions/download-artifact
       # - run: npm install -g surge
-      
+      - name: Create a release
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        run: npx semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       # Deploy our build folder to staging server
       - name: Deploy to Staging
         if: github.event_name == 'push'
