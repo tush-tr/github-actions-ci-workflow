@@ -9,6 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      # Cache our node modules
       - name: Cache node_modules
         uses: actions/cache@v1
         with: 
@@ -28,11 +29,29 @@ jobs:
       - run: npm test -- --coverage
         env:
           CI: true
-          # below steps will run only when request is merged in develop branch
+      # below step for uploading test coverage as artifact
+      - name: Upload test coverage
+        uses: actions/upload-artifact@v1
+        with:
+          name: code-coverage
+          path: coverage
+
+
+        # below step will run only when request is merged in develop branch
       - name: Build Project
         if: github.event_name == 'push'
         run: npm run build 
+        # Below step for uploading build folder as artifact
+      - name: Upload Build folder
+        uses: actions/upload-artifact@v1
+        with:
+          name: build
+          path: build
+
+      # - uses: actions/download-artifact
       # - run: npm install -g surge
+      
+      # Deploy our build folder to staging server
       - name: Deploy to Staging
         if: github.event_name == 'push'
         run: npx surge --project ./build --domain vacuous-nest.surge.sh
