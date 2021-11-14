@@ -1,5 +1,5 @@
 module.exports = {
-    branches: "master",
+    branches: "main",
     repositoryUrl: "https://github.com/tush-tr/github-actions-ci-workflow",
     plugins: [
         "@semantic-release/commit-analyzer",
