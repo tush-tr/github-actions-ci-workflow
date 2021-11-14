@@ -7,6 +7,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      SURGE_LOGIN: ${{ secrets.SURGE_LOGIN }}
+      SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}
     steps:
       - uses: actions/checkout@v2
       # Cache our node modules
@@ -63,11 +66,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       # Deploy our build folder to staging server
       - name: Deploy to Staging
-        if: github.event_name == 'push'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
         run: npx surge --project ./build --domain vacuous-nest.surge.sh
-        env:
-          SURGE_LOGIN: ${{ secrets.SURGE_LOGIN }}
-          SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}
+      - name: Deploy to Production
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: npx surge --project ./build --domain workable-debt.surge.sh
         
       
 
