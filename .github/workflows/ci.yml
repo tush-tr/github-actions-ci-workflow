@@ -37,12 +37,13 @@ jobs:
           path: coverage
 
 
-        # below step will run only when request is merged in develop branch
+        # below steps will run only when request is merged in develop branch
       - name: Build Project
         if: github.event_name == 'push'
         run: npm run build 
         # Below step for uploading build folder as artifact
       - name: Upload Build folder
+        if: github.event_name == 'push'
         uses: actions/upload-artifact@v1
         with:
           name: build
