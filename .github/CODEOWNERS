@@ -1,0 +1,4 @@
+* @tush-tr
+*.js @tush-tr
+*.yml @kaur99
+/public/ @tush-tr
