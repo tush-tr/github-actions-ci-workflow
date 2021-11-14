@@ -52,7 +52,7 @@ jobs:
       # - uses: actions/download-artifact
       # - run: npm install -g surge
       - name: Create a release
-        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
