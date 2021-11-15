@@ -8498,7 +8498,7 @@ const run = async () => {
         const token = core.getInput('token')
         const octokit = new github.getOctokit(token)
 
-        const response = await octokit.issues.create({
+        const response = await octokit.rest.issues.create({
             ...github.context.repo, // owner , repo
             title,
             body,
