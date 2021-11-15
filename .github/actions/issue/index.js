@@ -12,7 +12,7 @@ const run = async () => {
             ...github.context.repo, // owner , repo
             title,
             body,
-            assignees: assignees ? assignees.split('\n') : undefined
+            assignees: assignees ? assignees.split(',') : undefined
         });
 
         core.setOutput('issue', JSON.stringify(response.data))
