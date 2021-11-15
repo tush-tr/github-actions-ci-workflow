@@ -8,6 +8,7 @@ inputs:
     required: true
     default: tush
 
+
 outputs:
   time:
     description: 'The greeting time'
