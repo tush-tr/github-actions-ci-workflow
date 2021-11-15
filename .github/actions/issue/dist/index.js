@@ -8490,27 +8490,28 @@ var __webpack_exports__ = {};
 (() => {
 const core = __nccwpck_require__(2186)
 const github = __nccwpck_require__(5438)
-try {
-    // throw (new Error('Some error message'))
-    core.debug('Debug message')
-    core.warning('Warning message')
-    core.error('error message')
+const run = async () => {
+    try {
+        const title = core.getInput('title')
+        const body = core.getInput('body')
+        const assignees = core.getInput('assignees')
+        const token = core.getInput('token')
+        const octokit = new github.GitHub(token)
 
-    const name = core.getInput('who-to-greet')
-    core.setSecret('dwdw');
-    console.log(`Hello ${name}`)
-    const time = new Date();
-    core.setOutput("time", time.toTimeString())
-    core.startGroup('Logging github object')
-    console.log(JSON.stringify(github, null, '\t'))
-    core.endGroup();
-    core.exportVariable('HELLO',"hello")
-} catch (error){
-    core.setFailed(error.message);
+        const response = await octokit.rest.issues.create({
+            ...github.context.repo, // owner , repo
+            title,
+            body,
+            assignees: assignees ? assignees.split('\n') : undefined
+        });
+
+        core.setOutput('issue', JSON.stringify(response.data))
+
+    } catch (err) {
+        core.setFailed(err.message)
+    }
 }
-
-
-
+run();
 })();
 
 module.exports = __webpack_exports__;
