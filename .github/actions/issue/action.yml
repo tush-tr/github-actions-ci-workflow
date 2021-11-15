@@ -1,0 +1,23 @@
+name: 'Open Github Issue'
+author: tush-tr
+description: 'Open Github Issue'
+
+inputs:
+  token:
+    description: 'Github Token'
+    required: true
+  title:
+    description: 'Issue Title'
+    required: true
+  body:
+    description: 'Issue Body'
+  assignees:
+    description: 'Issue Assignees'
+
+outputs:
+  issue:
+    description: "issue object as json string"
+
+runs:
+  using: 'node12'
+  main: '/dist/index.js'
