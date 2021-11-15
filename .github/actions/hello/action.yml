@@ -1,0 +1,17 @@
+name: Hello World
+author: Tushar
+description: Some desc
+
+inputs:
+  who-to-greet:
+    description: 'who to greet'
+    required: true
+    default: tush
+
+outputs:
+  time:
+    description: 'The greeting time'
+
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
