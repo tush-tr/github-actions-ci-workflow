@@ -11,4 +11,3 @@ echo "::set-output name=time::$time"
 echo "::group::Some expadable logs"
 echo 'Some Stuff'
 echo "::endgroup::"
-echo "::set-env name=HELLO::hello"
