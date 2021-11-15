@@ -1,5 +1,5 @@
 const core = require('@actions/core')
-const gituhb = require('@actions/github')
+const github = require('@actions/github')
 try{
     const title = core.getInput('title')
     const body = core.getInput('body')
